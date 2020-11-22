@@ -10,11 +10,8 @@ import DatePicker from "../../../sharedComponents/DatePicker";
 import { reverseUnixTime } from "../../../helpers/reverseUnixTime";
 
 const { useEffect } = React;
-type Props = {
-  //   mode: string;
-};
 
-export const ItemForm: FunctionComponent<Props> = ({}: Props): JSX.Element => {
+export const ItemForm: FunctionComponent = (): JSX.Element => {
   const [form] = Form.useForm();
   const { id } = useParams<{ id: string | undefined }>();
   const history = useHistory();
