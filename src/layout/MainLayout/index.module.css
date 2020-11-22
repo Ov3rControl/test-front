@@ -1,0 +1,22 @@
+.header {
+  background-color: white;
+  margin-bottom: 10px;
+}
+
+.footer {
+  text-align: center;
+  background-color: white;
+}
+
+.content {
+  overflow: hidden;
+  overflow-x: scroll;
+  background-color: white;
+  padding: 0px 10px;
+}
+
+.mainMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
