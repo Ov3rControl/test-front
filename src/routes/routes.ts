@@ -9,6 +9,19 @@ const Home = lazy(() =>
 const NotFound = lazy(
   () => import("../sharedComponents/ErrorComponents/NotFound")
 );
+const Dashboard = lazy(() =>
+  import("../components/Dashboard").then(({ Dashboard }) => ({
+    default: Dashboard,
+  }))
+);
+
+const ItemForm = lazy(() =>
+  import("../components/Dashboard/components/Item.form").then(
+    ({ ItemForm }) => ({
+      default: ItemForm,
+    })
+  )
+);
 
 const routes = [
   {
@@ -16,14 +29,28 @@ const routes = [
     exact: true,
     name: "Login",
     component: Login,
-    requestedRole: [""],
+    requestedRole: [],
   },
   {
     path: ["/", "/home"],
     exact: true,
     name: "Home",
     component: Home,
-    requestedRole: ["user", "admin"],
+    requestedRole: ["user"],
+  },
+  {
+    path: "/dashboard",
+    exact: true,
+    name: "Dashboard",
+    component: Dashboard,
+    requestedRole: ["admin"],
+  },
+  {
+    path: ["/dashboard/create", "/dashboard/:id/edit"],
+    exact: true,
+    name: "ItemForm",
+    component: ItemForm,
+    requestedRole: ["admin"],
   },
   {
     path: "*",

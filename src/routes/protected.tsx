@@ -1,7 +1,10 @@
 import React, { Suspense } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { Login } from "../components";
 import { Unauthorized } from "../sharedComponents/ErrorComponents";
 import { Spinner } from "../sharedComponents/LoadingIndicator";
+
+const MainLayout = React.lazy(() => import("../layout/MainLayout"));
 
 type Props = {
   component: React.LazyExoticComponent<() => JSX.Element> | any;
@@ -21,18 +24,29 @@ const Protected = ({
   const isAuthed = !!localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const authorized = requestedRole.includes(role) ? true : false;
+  const AuthenticatedAndAuthorized = (props: any) => {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <MainLayout>
+          <Component {...rest} {...props} />
+        </MainLayout>
+      </Suspense>
+    );
+  };
+
   return (
     <Route
       {...rest}
       render={(props) => {
         if (isAuthed && authorized) {
-          return (
-            <Suspense fallback={<Spinner />}>
-              <Component {...rest} {...props} />
-            </Suspense>
-          );
+          return <AuthenticatedAndAuthorized props={props} />;
         } else if (!isAuthed) {
-          return <Redirect to="/login" />;
+          return (
+            <>
+              <Redirect to="/login" />;
+              <Login />
+            </>
+          );
         } else if (!authorized) {
           return <Unauthorized />;
         }
