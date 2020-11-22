@@ -1,20 +1,24 @@
 import { AxiosResponse } from "axios";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { User } from "../../store/atoms/atom";
 import { LoginFormType } from "../../types";
 import api from "../../utils/api";
 import { LoginView } from "./Login.view";
 
 export const Login = () => {
   const history = useHistory();
+  const setUserState = useSetRecoilState(User);
+
   const onFinish = (value: LoginFormType) => {
     api.postData("/auth", value, "POST").then((res: AxiosResponse) => {
       if (res.data.auth) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("role", res.data.role);
-        res.data.role === "user"
-          ? history.push("/home")
-          : history.push("/dashboard");
+        const { role, token } = res.data;
+        setUserState({ token, role });
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        role === "user" ? history.push("/home") : history.push("/dashboard");
       }
     });
   };
