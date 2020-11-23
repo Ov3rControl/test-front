@@ -23,6 +23,12 @@ const ItemForm = lazy(() =>
   )
 );
 
+const Item = lazy(() =>
+  import("../components/Home/components/item").then(({ Item }) => ({
+    default: Item,
+  }))
+);
+
 const routes = [
   {
     path: "/login",
@@ -51,6 +57,13 @@ const routes = [
     name: "ItemForm",
     component: ItemForm,
     requestedRole: ["admin"],
+  },
+  {
+    path: "/home/:id",
+    exact: true,
+    name: "Item",
+    component: Item,
+    requestedRole: ["user"],
   },
   {
     path: "*",

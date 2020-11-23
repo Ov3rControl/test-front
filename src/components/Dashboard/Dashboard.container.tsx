@@ -4,7 +4,7 @@ import api from "../../utils/api";
 import { DashboardView } from "./Dashboard.view";
 
 export const Dashboard: FunctionComponent = (): JSX.Element => {
-  // *TODO* Add UseImmer
+  // *TODO* Add Immer for Immutability
   const [state, setState] = React.useState<any>({
     data: [],
     pagination: {
@@ -28,6 +28,7 @@ export const Dashboard: FunctionComponent = (): JSX.Element => {
     setState((prevState: any) => ({ ...prevState, data }));
   };
 
+  // Refactor this section to external function or custom Hook
   React.useEffect(() => {
     Fetch();
   }, []);
