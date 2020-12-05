@@ -2,6 +2,10 @@ import { AxiosResponse } from "axios";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
+import {
+  NotificationStatus,
+  showNotification,
+} from "../../helpers/showNotication";
 import { User } from "../../store/atoms/atom";
 import { LoginFormType } from "../../types";
 import api from "../../utils/api";
@@ -12,15 +16,22 @@ export const Login = () => {
   const setUserState = useSetRecoilState(User);
 
   const onFinish = (value: LoginFormType) => {
-    api.postData("/auth", value, "POST").then((res: AxiosResponse) => {
-      if (res.data.auth) {
-        const { role, token } = res.data;
-        setUserState({ token, role });
-        localStorage.setItem("token", token);
+    api
+      .postData("/auth/signin", value, "POST")
+      .then((res: AxiosResponse) => {
+        const { role, accessToken } = res.data;
+        setUserState({ token: accessToken, role });
+        localStorage.setItem("token", accessToken);
         localStorage.setItem("role", role);
-        role === "user" ? history.push("/home") : history.push("/dashboard");
-      }
-    });
+        role === 1 ? history.push("/home") : history.push("/dashboard");
+      })
+      .catch(() =>
+        showNotification(
+          NotificationStatus.error,
+          "Unauthorized",
+          "Invalid Login Credentials"
+        )
+      );
   };
 
   return <LoginView onFinish={onFinish} />;
