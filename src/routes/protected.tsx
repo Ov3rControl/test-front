@@ -22,8 +22,9 @@ const Protected = ({
   ...rest
 }: Props) => {
   const isAuthed = !!localStorage.getItem("token");
-  const role = localStorage.getItem("role");
-  const authorized = requestedRole.includes(role) ? true : false;
+  const role = localStorage.getItem("role")?.toString();
+  const convertRoles = role === "0" ? "admin" : "user";
+  const authorized = requestedRole.includes(convertRoles) ? true : false;
   const AuthenticatedAndAuthorized = (props: any) => {
     return (
       <Suspense fallback={<Spinner />}>
