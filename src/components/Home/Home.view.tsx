@@ -26,6 +26,7 @@ export const HomeView: FunctionComponent<Props> = ({
         {data?.map((item) => (
           <Col span={6}>
             <ItemCard
+              key={item.id}
               id={item.id}
               name={item.name}
               description={item.description}

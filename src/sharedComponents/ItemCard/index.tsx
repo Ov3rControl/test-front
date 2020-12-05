@@ -20,6 +20,7 @@ export const ItemCard: FunctionComponent<Props> = ({
   const history = useHistory();
   return (
     <Card
+      key={id}
       hoverable
       onClick={() => history.push(`/home/${id}`)}
       style={{ width: 240 }}
