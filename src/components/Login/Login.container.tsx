@@ -15,15 +15,24 @@ export const Login = () => {
   const history = useHistory();
   const setUserState = useSetRecoilState(User);
 
-  const onFinish = (value: LoginFormType) => {
+  const onFinish = (value: LoginFormType, type: string) => {
+    const url = type === "login" ? "/auth/signin" : "/auth/signup";
     api
-      .postData("/auth/signin", value, "POST")
+      .postData(url, value, "POST")
       .then((res: AxiosResponse) => {
-        const { role, accessToken } = res.data;
-        setUserState({ token: accessToken, role });
-        localStorage.setItem("token", accessToken);
-        localStorage.setItem("role", role);
-        role === 1 ? history.push("/home") : history.push("/dashboard");
+        if (type === "login") {
+          const { role, accessToken } = res.data;
+          setUserState({ token: accessToken, role });
+          localStorage.setItem("token", accessToken);
+          localStorage.setItem("role", role);
+          role === 1 ? history.push("/home") : history.push("/dashboard");
+        } else {
+          showNotification(
+            NotificationStatus.info,
+            "Account Created",
+            "You can now login"
+          );
+        }
       })
       .catch(() =>
         showNotification(
