@@ -7,3 +7,10 @@ export const User = atom({
     role: localStorage.getItem("role"),
   },
 });
+
+export const AutoBidSettings = atom({
+  key: "autoBidSettings",
+  default: {
+    maxBidAmount: 300,
+  },
+});
