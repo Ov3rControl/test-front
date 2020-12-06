@@ -20,7 +20,7 @@ export const Drawer: React.FunctionComponent<Props> = ({
   return (
     <>
       <AntDDrawer
-        title="Basic Drawer"
+        title={item?.name}
         placement="right"
         closable={false}
         onClose={onClose}
@@ -29,7 +29,7 @@ export const Drawer: React.FunctionComponent<Props> = ({
         <p>ID : {item?.id}</p>
         <p>Name : {item?.name}</p>
         <p>Description : {item?.description}</p>
-        <img width="120" src={item?.imageUrl} alt={item?.name} />
+        <img width="120" src={item?.imageUrl} alt={item?.name || "item"} />
         <p>Current Bid : {item?.bid}</p>
         <div>
           <p>Bid History</p>

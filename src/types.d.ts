@@ -43,3 +43,11 @@ export interface TableStateType extends ItemTypeRes {
   };
   loading: boolean;
 }
+
+export type SSEItemData = {
+  id: number;
+  bid: number;
+  bidHistory: string[];
+  highestBidder: string;
+  action?: boolean;
+};
