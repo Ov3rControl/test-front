@@ -29,6 +29,12 @@ const Item = lazy(() =>
   }))
 );
 
+const Profile = lazy(() =>
+  import("../components/Profile").then(({ Profile }) => ({
+    default: Profile,
+  }))
+);
+
 const routes = [
   {
     path: "/login",
@@ -63,6 +69,13 @@ const routes = [
     exact: true,
     name: "Item",
     component: Item,
+    requestedRole: ["user"],
+  },
+  {
+    path: "/profile",
+    exact: true,
+    name: "Profile",
+    component: Profile,
     requestedRole: ["user"],
   },
   {

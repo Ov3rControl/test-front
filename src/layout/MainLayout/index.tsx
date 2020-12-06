@@ -10,9 +10,8 @@ const { Header, Content, Footer } = Layout;
 export const MainLayout: FunctionComponent = ({ children }): JSX.Element => {
   const user = useRecoilValue(User);
   const history = useHistory();
-
   const navigate = () =>
-    user.role === "admin" ? history.push("/dashboard") : history.push("/home");
+    user.role === "0" ? history.push("/dashboard") : history.push("/home");
 
   const logout = () => {
     localStorage.clear();
@@ -24,8 +23,14 @@ export const MainLayout: FunctionComponent = ({ children }): JSX.Element => {
       <Header className={styles.header}>
         <Menu className={styles.mainMenu} theme="light" mode="horizontal">
           <Menu.Item onClick={navigate} key="1">
-            {user.role === "admin" ? "Dashboard" : "Home"}
+            {user.role === "0" ? "Dashboard" : "Home"}
           </Menu.Item>
+          {user.role === "1" && (
+            <Menu.Item onClick={() => history.push("/profile")} key="2">
+              My Profile
+            </Menu.Item>
+          )}
+
           <Button onClick={logout} danger>
             Logout
           </Button>

@@ -51,3 +51,8 @@ export type SSEItemData = {
   highestBidder: string;
   action?: boolean;
 };
+
+export interface MyProfileItems {
+  username: string;
+  items: ItemType & { bill: number }[];
+}
