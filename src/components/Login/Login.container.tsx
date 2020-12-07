@@ -15,10 +15,10 @@ export const Login = () => {
   const history = useHistory();
   const setUserState = useSetRecoilState(User);
 
-  const onFinish = (value: LoginFormType, type: string) => {
+  const onFinish = (value: LoginFormType, type: string, userType: string) => {
     const url = type === "login" ? "/auth/signin" : "/auth/signup";
     api
-      .postData(url, value, "POST")
+      .postData(url, { ...value, role: userType }, "POST")
       .then((res: AxiosResponse) => {
         if (type === "login") {
           const { role, accessToken } = res.data;
