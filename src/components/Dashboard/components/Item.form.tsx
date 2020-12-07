@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Form, Input, Button } from "antd";
 
-import api from "../../../utils/api";
+import { axiosApiInstance } from "../../../utils/api";
 import { AxiosResponse } from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import { ItemType, ItemTypeRes } from "../../../types";
@@ -19,25 +19,28 @@ export const ItemForm: FunctionComponent = (): JSX.Element => {
 
   useEffect(() => {
     if (editMode)
-      api.getData(`items/${id}`).then((res: AxiosResponse<ItemTypeRes>) => {
-        const { name, description, imageUrl, closeDate } = res.data;
-        form.setFieldsValue({
-          name,
-          description,
-          imageUrl,
-          closeDate: reverseUnixTime(closeDate),
+      axiosApiInstance
+        .get(`items/${id}`)
+        .then((res: AxiosResponse<ItemTypeRes>) => {
+          const { name, description, imageUrl, closeDate } = res.data;
+          form.setFieldsValue({
+            name,
+            description,
+            imageUrl,
+            closeDate: reverseUnixTime(closeDate),
+          });
         });
-      });
   }, [editMode, form, id]);
 
   const onFinish = (values: ItemType) => {
-    const requestType = editMode ? "PATCH" : "POST";
+    const requestType = editMode ? "patch" : "post";
     const requestUrl = editMode ? `/items/${id}` : "/items";
     const closeDate = getUnixTimestamp(values.closeDate.$d.toISOString());
 
-    api
-      .postData(requestUrl, { ...values, closeDate }, requestType)
-      .then(() => history.push("/dashboard"));
+    axiosApiInstance[requestType](requestUrl, {
+      ...values,
+      closeDate,
+    }).then(() => history.push("/dashboard"));
   };
   return (
     <div>

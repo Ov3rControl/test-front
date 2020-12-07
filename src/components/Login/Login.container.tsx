@@ -8,7 +8,7 @@ import {
 } from "../../helpers/showNotication";
 import { User } from "../../store/atoms/atom";
 import { LoginFormType } from "../../types";
-import api from "../../utils/api";
+import { axiosApiInstance } from "../../utils/api";
 import { LoginView } from "./Login.view";
 
 export const Login = () => {
@@ -17,15 +17,16 @@ export const Login = () => {
 
   const onFinish = (value: LoginFormType, type: string, userType: string) => {
     const url = type === "login" ? "/auth/signin" : "/auth/signup";
-    api
-      .postData(url, { ...value, role: userType }, "POST")
+    axiosApiInstance
+      .post(url, { ...value, role: userType })
       .then((res: AxiosResponse) => {
         if (type === "login") {
-          const { role, accessToken } = res.data;
+          const { accessToken } = res.data;
+          const role = String(res.data.role);
           setUserState({ token: accessToken, role });
           localStorage.setItem("token", accessToken);
           localStorage.setItem("role", role);
-          role === 1 ? history.push("/home") : history.push("/dashboard");
+          role === "1" ? history.push("/home") : history.push("/dashboard");
         } else {
           showNotification(
             NotificationStatus.info,

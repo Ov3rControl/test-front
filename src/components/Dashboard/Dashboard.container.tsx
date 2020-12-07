@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../utils/api";
+import { axiosApiInstance } from "../../utils/api";
 import { DashboardView } from "./Dashboard.view";
 
 export const Dashboard: FunctionComponent = (): JSX.Element => {
@@ -21,7 +21,7 @@ export const Dashboard: FunctionComponent = (): JSX.Element => {
       : history.push(`/dashboard/${id}/edit`);
 
   const deleteRecord = (record: string | undefined) => {
-    api.deleteData(`items/${record}`);
+    axiosApiInstance.delete(`items/${record}`);
     const data = state.data.filter(
       (item: { id: string }) => item.id !== record
     );
@@ -39,7 +39,7 @@ export const Dashboard: FunctionComponent = (): JSX.Element => {
   const Fetch = (page?: string) => {
     setState((prevState: any) => ({ ...prevState, loading: true }));
 
-    api.getData("items?page=" + (page ? page : "1")).then((data) => {
+    axiosApiInstance.get("items?page=" + (page ? page : "1")).then((data) => {
       setState({
         loading: false,
         data: data.data.items,

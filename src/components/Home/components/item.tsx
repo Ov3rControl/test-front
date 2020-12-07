@@ -10,7 +10,7 @@ import {
   showNotification,
 } from "../../../helpers/showNotication";
 import { ItemTypeRes, SSEItemData } from "../../../types";
-import api from "../../../utils/api";
+import { axiosApiInstance } from "../../../utils/api";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AutoBidSettings, User } from "../../../store/atoms/atom";
 
@@ -30,9 +30,11 @@ export const Item: FunctionComponent = (): JSX.Element => {
   const [autoBidSettings, setAutoBidSettings] = useRecoilState(AutoBidSettings);
 
   React.useEffect(() => {
-    api.getData(`items/${id}`).then((res: AxiosResponse<ItemTypeRes>) => {
-      setItem(res.data);
-    });
+    axiosApiInstance
+      .get(`items/${id}`)
+      .then((res: AxiosResponse<ItemTypeRes>) => {
+        setItem(res.data);
+      });
   }, [id]);
 
   React.useEffect(() => {
@@ -89,8 +91,8 @@ export const Item: FunctionComponent = (): JSX.Element => {
   }, [autoBid, item]);
 
   const bidNow = (autobid?: number) => {
-    api
-      .postData(`/items/${id}/bid`, { bid: autobid || bid }, "PATCH")
+    axiosApiInstance
+      .patch(`/items/${id}/bid`, { bid: autobid || bid })
       .then((res) => {
         if (res.data.action === false) {
           showNotification(

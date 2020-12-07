@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import api from "../../utils/api";
+import { axiosApiInstance } from "../../utils/api";
 import { HomeView } from "./Home.view";
 
 export const Home: FunctionComponent = (): JSX.Element => {
@@ -20,7 +20,7 @@ export const Home: FunctionComponent = (): JSX.Element => {
   const Fetch = (page?: string) => {
     setState((prevState: any) => ({ ...prevState, loading: true }));
 
-    api.getData("items?page=" + (page ? page : "1")).then((data) => {
+    axiosApiInstance.get("items?page=" + (page ? page : "1")).then((data) => {
       setState({
         loading: false,
         data: data.data.items,
