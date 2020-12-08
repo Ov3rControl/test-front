@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { Row, Col } from "antd";
 import { ItemCard } from "../../sharedComponents/ItemCard";
-
+import styles from "./Home.view.module.css";
 type Props = {
   data: {
     id: string;
@@ -17,23 +16,18 @@ export const HomeView: FunctionComponent<Props> = ({
   return (
     <div>
       <h1>Auction Items</h1>
-      <Row
-        gutter={[
-          { xs: 8, sm: 16, md: 24, lg: 32 },
-          { xs: 8, sm: 16, md: 24, lg: 32 },
-        ]}
-      >
+      <div className={styles.row}>
         {data?.map((item) => (
-          <Col key={item.id} span={6}>
+          <div key={item.id} className={styles.column}>
             <ItemCard
               id={item.id}
               name={item.name}
               description={item.description}
               imageUrl={item.imageUrl}
             />
-          </Col>
+          </div>
         ))}
-      </Row>
+      </div>
     </div>
   );
 };
