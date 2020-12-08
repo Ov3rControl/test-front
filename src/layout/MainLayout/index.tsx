@@ -1,17 +1,16 @@
 import React, { FunctionComponent } from "react";
-import { Button, InputNumber, Layout, Menu, Popover } from "antd";
+import { Button, Layout, Menu, Popover } from "antd";
 import styles from "./index.module.css";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { AutoBidSettings, User } from "../../store/atoms/atom";
+import { useRecoilValue } from "recoil";
+import { User } from "../../store/atoms/atom";
 import { useHistory } from "react-router-dom";
+import { AutoBidController } from "./autoBidController";
 
 const { Header, Content, Footer } = Layout;
 
 export const MainLayout: FunctionComponent = ({ children }): JSX.Element => {
   const user = useRecoilValue(User);
   const history = useHistory();
-  const [inputNumber, setInputNumber] = React.useState<number>(0);
-  const [autoBidSettings, setAutoBidSettings] = useRecoilState(AutoBidSettings);
   const [visible, setVisible] = React.useState<boolean>(false);
 
   const navigate = () =>
@@ -26,24 +25,7 @@ export const MainLayout: FunctionComponent = ({ children }): JSX.Element => {
     if (user.role === "1") {
       return (
         <Popover
-          content={
-            <div>
-              <p>Current Balance : {autoBidSettings?.maxBidAmount}</p>
-              <p>Max Bid Amount</p>
-              <InputNumber
-                value={inputNumber}
-                onChange={(value) => setInputNumber(Number(value))}
-              />
-              <Button
-                type="ghost"
-                onClick={() =>
-                  setAutoBidSettings({ maxBidAmount: inputNumber })
-                }
-              >
-                Save
-              </Button>
-            </div>
-          }
+          content={<AutoBidController />}
           title="Configuration"
           trigger="click"
           visible={visible}
