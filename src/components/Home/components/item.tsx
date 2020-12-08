@@ -1,4 +1,4 @@
-import { Button, Checkbox, InputNumber } from "antd";
+import { Badge, Button, Checkbox, Descriptions, InputNumber } from "antd";
 import Countdown from "antd/lib/statistic/Countdown";
 import { AxiosResponse } from "axios";
 import React, { FunctionComponent, useState } from "react";
@@ -111,40 +111,57 @@ export const Item: FunctionComponent = (): JSX.Element => {
   };
 
   return (
-    <div key={item?.id}>
+    <Descriptions
+      key={item?.id}
+      title="Item Information"
+      layout="vertical"
+      bordered
+    >
       {item?.status === ItemStatus.CLOSED && (
-        <h1>Bid Closed ! Winner: {item.highestBidder} </h1>
+        <Descriptions.Item label="Bid Winner">
+          {item.highestBidder}
+        </Descriptions.Item>
       )}
-      <Countdown value={reverseUnixTime(item?.closeDate || "").format()} />
-      <p>ID : {item?.id}</p>
-      <p>Name : {item?.name}</p>
-      <p>Description : {item?.description}</p>
-      <img width="120" src={item?.imageUrl} alt={item?.name || "item"} />
-      <p>Current Bid : {item?.bid}</p>
-      <div>
-        <p>Bid History</p>
+      <Descriptions.Item label="Product Name">{item?.name}</Descriptions.Item>
+      <Descriptions.Item label="Description">
+        {item?.description}
+      </Descriptions.Item>
+      <Descriptions.Item label="Image">
+        <img width="120" src={item?.imageUrl} alt={item?.name || "item"} />
+      </Descriptions.Item>
+      <Descriptions.Item label="Last Bid">{item?.bid}</Descriptions.Item>
+      <Descriptions.Item label="Status" span={3}>
+        <Badge
+          status={item?.status === ItemStatus.OPEN ? "processing" : "error"}
+          text={item?.status === ItemStatus.OPEN ? "IN_PROGRESS" : "CLOSED"}
+        />
+      </Descriptions.Item>
+      <Descriptions.Item label="Bidding ends in">
+        <Countdown value={reverseUnixTime(item?.closeDate || "").format()} />
+      </Descriptions.Item>
+      <Descriptions.Item label="Bid Actions">
+        {item?.status !== ItemStatus.CLOSED && (
+          <div>
+            <h4>Bid with a higher quantity than the current bid</h4>
+            <Checkbox
+              name="AutoBid"
+              value={autoBid}
+              onChange={() => setAutoBid((prevValue) => !prevValue)}
+            >
+              AutoBid
+            </Checkbox>
+            <InputNumber onChange={(e) => setBid(e)} />
+            <Button onClick={() => bidNow()}>Bid Now</Button>
+          </div>
+        )}
+      </Descriptions.Item>
+      <Descriptions.Item label="Bids History" span={2}>
         <ul key={item?.id}>
           {item?.bidHistory?.map((item: React.ReactNode) => (
             <li>{item}</li>
           ))}
         </ul>
-      </div>
-      <p>Close Date : {reverseUnixTime(item?.closeDate || "").format()}</p>
-      <p>Created At: {item?.createdAt}</p>
-      {item?.status !== ItemStatus.CLOSED && (
-        <div>
-          <h4>Bid with a higher quantity than the current bid</h4>
-          <Checkbox
-            name="AutoBid"
-            value={autoBid}
-            onChange={() => setAutoBid((prevValue) => !prevValue)}
-          >
-            AutoBid
-          </Checkbox>
-          <InputNumber onChange={(e) => setBid(e)} />
-          <Button onClick={() => bidNow()}>Bid Now</Button>
-        </div>
-      )}
-    </div>
+      </Descriptions.Item>
+    </Descriptions>
   );
 };
